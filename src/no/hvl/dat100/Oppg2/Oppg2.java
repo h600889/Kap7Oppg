@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Oppg2 {
     public static void main (String[] args) {
-        resFile(new File("tall"));
+        resFile(new File("newfile"));
     }
 
     public static void resFile(File f) {
@@ -27,7 +27,11 @@ public class Oppg2 {
                     ints++;
                     sum += findInts.nextInt();
                 }
-                writeFile.println("amt of #: " + ints + ", sum: " + sum);
+                if (ints == 0) {
+                    writeFile.println("no numbers!!!");
+                } else {
+                    writeFile.println("amt of #: " + ints + ", sum: " + sum);
+                }
                 sum = 0;
                 ints = 0;
             }
