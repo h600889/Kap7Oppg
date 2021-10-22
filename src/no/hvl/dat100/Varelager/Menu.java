@@ -27,7 +27,6 @@ public class Menu {
             case 4 -> editProduct();
             case 5 -> buyProduct();
             case 6 -> javax.swing.JOptionPane.showMessageDialog(null, user.toString());
-            //viewInventory();
             case 7 -> {
                 user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter new nme")));
                 user.createUser();
@@ -103,10 +102,16 @@ public class Menu {
                         (productsFile.readProductsFile().toString() + "\n enter the number of the prduct u wanna buy:"));
         Product product = productsFile.readProductsFile().findProduct(productNr);
 
-        user.buyProduct(product);
+        if (product.getStock() > 0 && user.getFunds() >= product.getPrice()) {
+            user.buyProduct(product);
 
-        ProductStorage products = productsFile.readProductsFile();
-        products.findProduct(productNr).removeStock();
-        productsFile.writeProductsFile(products);
+            ProductStorage products = productsFile.readProductsFile();
+            products.findProduct(productNr).removeStock();
+            productsFile.writeProductsFile(products);
+        } else if (user.getFunds() < product.getPrice()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "u dont have enough money");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "product is not in stock");
+        }
     }
 }

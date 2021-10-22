@@ -81,6 +81,6 @@ public class Product {
      * @return the product but like as a nice looking string (for representation in menu)
      */
     public String toNiceString() {
-        return productNr + ". Product: $" + price + " " + name + ", " + stock + " in stock\n";
+        return productNr + ". $" + price + " " + name + ", " + stock + " in stock\n";
     }
 }

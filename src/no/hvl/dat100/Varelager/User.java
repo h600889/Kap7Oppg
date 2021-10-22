@@ -19,6 +19,10 @@ public class User {
         return possesions;
     }
 
+    public double getFunds() {
+        return funds;
+    }
+
     /**
      * removes funds from the user's balance
      * @param amt amount to be removed
