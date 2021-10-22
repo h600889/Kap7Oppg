@@ -1,8 +1,5 @@
 package no.hvl.dat100.Varelager;
 
-import java.io.File;
-import java.io.IOException;
-
 public class Main {
     public static void main(String[] args) {
         ProductsFile productsFile = new ProductsFile("Products");

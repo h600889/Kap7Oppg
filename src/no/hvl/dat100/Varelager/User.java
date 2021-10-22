@@ -2,15 +2,22 @@ package no.hvl.dat100.Varelager;
 
 import java.io.IOException;
 
+/**
+ * User for handling users who can purchase and sell products.
+ */
 public class User {
     private ProductsFile possesions;
     private String name;
     private double funds;
 
+    /**
+     * constructor for user
+     * @param possesions file storing information about the user
+     */
     public User(ProductsFile possesions) {
         this.possesions = possesions;
         this.name = possesions.getProductFile().getName();
-        //only looks for funds in the file if the file exists
+        //create user if doesnt exist, look for funds in the file if the file exists
         if (!createUser()) {
             this.funds = possesions.readProductsFile().findProduct(1).getPrice();
         }
@@ -55,6 +62,10 @@ public class User {
         removeFunds(product.getPrice());
     }
 
+    /**
+     * sell a product from the user's inventory
+     * @param product product to be sold
+     */
     public void sellProduct(Product product) {
         ProductStorage products = possesions.readProductsFile();
         Product foundProduct = products.findProduct(product);
@@ -79,12 +90,20 @@ public class User {
         return possesionsStr;
     }
 
+    /**
+     * returns only products, not information about user
+     * @return productstorage containing every line from possesions except the first (the one about user)
+     */
     public ProductStorage getProducts() {
         ProductStorage newStorage = possesions.readProductsFile();
         newStorage.remove(newStorage.findProduct(1));
         return newStorage;
     }
 
+    /**
+     * gets rid of a product if its stock is 0
+     * @param product product to be removed (if stock is 0)
+     */
     public void clean(Product product) {
         ProductStorage cleanProducts = possesions.readProductsFile();
         if (cleanProducts.findProduct(product).getStock() <= 0) { cleanProducts.remove(product); }

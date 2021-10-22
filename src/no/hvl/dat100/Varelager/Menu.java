@@ -1,10 +1,17 @@
 package no.hvl.dat100.Varelager;
 
+/**
+ * menu class for handling the menu that lets the user interact with products
+ */
 public class Menu {
 
     private ProductsFile productsFile;
     private User user;
 
+    /**
+     * constructor
+     * @param productsFile file containing the stored products
+     */
     public Menu(ProductsFile productsFile) {
         this.productsFile = productsFile;
         this.user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter username")));
@@ -73,7 +80,7 @@ public class Menu {
                     (javax.swing.JOptionPane.showInputDialog("stock:"));
 
             if (javax.swing.JOptionPane.showInputDialog("is this ok? (Y/N)\n" +
-                    "name:" + productName + "\nprice:" + productPrice + "\nstock:" + productStock).toLowerCase().startsWith("Y")) {
+                    "name:" + productName + "\nprice:" + productPrice + "\nstock:" + productStock).toLowerCase().startsWith("y")) {
                 correctProduct = true;
             }
         } while (correctProduct);
@@ -126,6 +133,10 @@ public class Menu {
         productsFile.writeProductsFile(products);
     }
 
+    /**
+     * sell producte
+     * @param productsList list of products to sell from
+     */
     public void sellProduct(ProductStorage productsList) {
         if (productsList == null) { return; }
         int productNr;

@@ -1,5 +1,8 @@
 package no.hvl.dat100.Varelager;
 
+/**
+ * class for products
+ */
 public class Product {
     private String name;
     private double price;

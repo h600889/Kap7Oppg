@@ -1,9 +1,16 @@
 package no.hvl.dat100.Varelager;
 
+/**
+ * class for managing collections (storage) of products (productstorage) (v selfexplanatory)
+ */
 public class ProductStorage {
     private Product[] products;
     private int amount;
 
+    /**
+     * constructor (its assumed there wll never be more than 100 products becuase the tasks says so)
+     * amount is always 0 at first, since there are no products
+     */
     public ProductStorage() {
         products = new Product[100];
         amount = 0;
@@ -92,7 +99,6 @@ public class ProductStorage {
             }
             i++;
         }
-
 
         if (isRemoved) {
             for (int j = 1; j < amount; j++) {

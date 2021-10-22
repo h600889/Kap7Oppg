@@ -3,9 +3,16 @@ package no.hvl.dat100.Varelager;
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * class for managing files which prducts are saved in
+ */
 public class ProductsFile {
     private File productFile;
 
+    /**
+     * constructor
+     * @param fileName name of the file
+     */
     ProductsFile(String fileName) {
         this.productFile = new File(fileName);
     }
