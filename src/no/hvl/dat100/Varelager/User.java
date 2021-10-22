@@ -10,7 +10,8 @@ public class User {
     public User(ProductsFile possesions) {
         this.possesions = possesions;
         this.name = possesions.getProductFile().getName();
-        if (possesions.getProductFile().exists()) {
+        //only looks for funds in the file if the file exists
+        if (!createUser()) {
             this.funds = possesions.readProductsFile().findProduct(1).getPrice();
         }
     }
@@ -70,22 +71,23 @@ public class User {
     }
 
     /**
-     * initializes user, new or old
+     * checks if it needs to create a new file for the user
+     * @return true if it made a new file, false otherwise
      */
-    public void createUser() {
+    public boolean createUser() {
         if (!possesions.getProductFile().exists()) {
             try {
+                //creates file for user
                 funds = Double.parseDouble(javax.swing.JOptionPane.showInputDialog("how muc money"));
                 possesions.getProductFile().createNewFile();
                 ProductStorage newUser = possesions.readProductsFile();
                 newUser.addProduct(new Product(possesions.getProductFile().getName(), funds, 0));
                 possesions.writeProductsFile(newUser);
+                return true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        possesions.editProductInFile(new Product(name,funds,0), 1);
-        funds = possesions.readProductsFile().findProduct(1).getPrice();
-
+        return false;
     }
 }

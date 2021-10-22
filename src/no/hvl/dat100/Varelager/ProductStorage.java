@@ -80,10 +80,9 @@ public class ProductStorage {
     /**
      * removes a product from storage
      * @param product product to be removed
-     * @return true if product was removed, false otherwise
      */
-    public boolean remove(Product product) {
-        if (findProduct(product) == null) { return false; }
+    public void remove(Product product) {
+        if (findProduct(product) == null) { return; }
         boolean isRemoved = false;
         int i = 0;
         while (!isRemoved && i < amount) {
@@ -104,6 +103,5 @@ public class ProductStorage {
             }
         }
         amount--;
-        return isRemoved;
     }
 }

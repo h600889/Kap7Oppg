@@ -8,7 +8,6 @@ public class Menu {
     public Menu(ProductsFile productsFile) {
         this.productsFile = productsFile;
         this.user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter username")));
-        user.createUser();
     }
 
     /**
@@ -17,36 +16,44 @@ public class Menu {
      */
     public boolean mainMenu() {
         boolean finished = false;
-        switch (Integer.parseInt
-                (javax.swing.JOptionPane.showInputDialog
-                        ("chose smth\n(1) view products\n(2) search products\n(3) add product\n(4) edit product" +
-                                "\n(5) buy prduct\n(6) view inventory\n(7) switch user\n(8) quit"))) {
-            case 1 -> javax.swing.JOptionPane.showMessageDialog(null, productsFile.readProductsFile().toString());
-            case 2 -> search();
-            case 3 -> addProduct();
-            case 4 -> editProduct();
-            case 5 -> buyProduct();
-            case 6 -> javax.swing.JOptionPane.showMessageDialog(null, user.toString());
-            case 7 -> {
-                user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter new nme")));
-                user.createUser();
+        try {
+            switch (Integer.parseInt
+                    (javax.swing.JOptionPane.showInputDialog
+                            ("""
+                                    chose smth
+                                    (1) view products
+                                    (2) search products
+                                    (3) view inventory
+                                    (4) edit product
+                                    (5) add product
+                                    (6) switch user
+                                    (7) quit"""))) {
+                case 1 -> buyProduct(productsFile.readProductsFile());
+                case 2 -> buyProduct(search());
+                case 3 -> javax.swing.JOptionPane.showMessageDialog(null, user.toString());
+                case 4 -> editProduct();
+                case 5 -> addProduct();
+                case 6 -> user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter new nme")));
+                default -> finished = true;
             }
-            default -> finished = true;
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "thats not a number"); return false;
         }
+
         return finished;
     }
 
     /**
      * searches for a product in storage
      */
-    public void search() {
+    public ProductStorage search() {
         String search = javax.swing.JOptionPane.showInputDialog("search");
         if (productsFile.searchProductsFile(search).toString().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "prduct not found");
         } else {
-            javax.swing.JOptionPane.showMessageDialog
-                    (null, productsFile.searchProductsFile(search));
+            return productsFile.searchProductsFile(search);
         }
+        return null;
     }
 
     /**
@@ -96,11 +103,19 @@ public class Menu {
     /**
      * buys a product in storage
      */
-    public void buyProduct() {
-        int productNr = Integer.parseInt
-                (javax.swing.JOptionPane.showInputDialog
-                        (productsFile.readProductsFile().toString() + "\n enter the number of the prduct u wanna buy:"));
-        Product product = productsFile.readProductsFile().findProduct(productNr);
+    public void buyProduct(ProductStorage productsList) {
+        if (productsList == null) { return; }
+        int productNr;
+        try {
+            productNr = Integer.parseInt
+                    (javax.swing.JOptionPane.showInputDialog
+                            (productsList + "\n enter the number of the prduct u wanna buy:"));
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "u didnt neter a number"); return;
+        }
+
+        if (productNr <= 0) { return; }
+        Product product = productsList.findProduct(productNr);
 
         if (product.getStock() > 0 && user.getFunds() >= product.getPrice()) {
             user.buyProduct(product);
