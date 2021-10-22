@@ -77,6 +77,11 @@ public class ProductStorage {
         return null;
     }
 
+    /**
+     * removes a product from storage
+     * @param product product to be removed
+     * @return true if product was removed, false otherwise
+     */
     public boolean remove(Product product) {
         if (findProduct(product) == null) { return false; }
         boolean isRemoved = false;

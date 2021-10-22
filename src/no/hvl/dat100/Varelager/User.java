@@ -15,13 +15,9 @@ public class User {
         }
     }
 
-    public ProductsFile getPossesions() {
-        return possesions;
-    }
+    public ProductsFile getPossesions() { return possesions; }
 
-    public double getFunds() {
-        return funds;
-    }
+    public double getFunds() { return funds; }
 
     /**
      * removes funds from the user's balance
@@ -58,6 +54,10 @@ public class User {
         removeFunds(product.getPrice());
     }
 
+    /**
+     * puts information abt user and sutff in a string
+     * @return string with user and product list
+     */
     public String toString() {
         ProductStorage productsStorage = possesions.readProductsFile();
         String possesionsStr = "name: " + productsStorage.findProduct(1).getName() +
