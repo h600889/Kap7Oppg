@@ -6,11 +6,9 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         ProductsFile productsFile = new ProductsFile("Products");
-        User user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter username")));
-        user.createUser();
 
         boolean finished;
-        Menu menu = new Menu(productsFile, user);
+        Menu menu = new Menu(productsFile);
         do {
             finished = menu.mainMenu();
         } while (!finished);

@@ -40,10 +40,14 @@ public class Product {
         return stock;
     }
 
-    public void addStock() {
-        stock++;
-    }
+    /**
+     * adds 1 to stock
+     */
+    public void addStock() { this.stock++; }
 
+    /**
+     * removes 1 from stock
+     */
     public void removeStock() {
         stock--;
     }
@@ -56,13 +60,17 @@ public class Product {
         return productNr;
     }
 
+    /**
+     * sets productNr (especially useful for ProductStorage, makes it v easy to make sure products always have productnr corresponding to thingy)
+     * @param productNr new product number
+     */
     public void setProductNr(int productNr) {
         this.productNr = productNr;
     }
 
     /**
      *
-     * @return the product but like as a string
+     * @return the product but like as a string (for representation in text files)
      */
     public String toString() {
         return  name + ";" + price + ";" + stock + ";" + productNr;
@@ -70,7 +78,7 @@ public class Product {
 
     /**
      *
-     * @return the product but like as a nice looking string
+     * @return the product but like as a nice looking string (for representation in menu)
      */
     public String toNiceString() {
         return productNr + ". Product: $" + price + " " + name + ", " + stock + " in stock\n";

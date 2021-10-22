@@ -1,6 +1,5 @@
 package no.hvl.dat100.Varelager;
 
-import java.io.File;
 import java.io.IOException;
 
 public class User {
@@ -8,43 +7,81 @@ public class User {
     private String name;
     private double funds;
 
-    //make anoter constructor for when user doesnt already exist
     public User(ProductsFile possesions) {
         this.possesions = possesions;
-        this.name = possesions.readProductsFile().findProduct(1).getName();
-        this.funds = possesions.readProductsFile().findProduct(1).getPrice();
+        this.name = possesions.getProductFile().getName();
+        if (possesions.getProductFile().exists()) {
+            this.funds = possesions.readProductsFile().findProduct(1).getPrice();
+        }
     }
 
+    public ProductsFile getPossesions() {
+        return possesions;
+    }
+
+    /**
+     * removes funds from the user's balance
+     * @param amt amount to be removed
+     */
     public void removeFunds(double amt) {
-        possesions.editProductInFile(new Product(name,funds-amt,0), 1);
         funds -= amt;
+        possesions.editProductInFile(new Product(name,funds,0), 1);
     }
 
+    /**
+     * adds funds to the user's balance
+     * @param amt amount to be added
+     */
     public void addFunds(double amt) {
-        possesions.editProductInFile(new Product(name,funds+amt,0), 1);
         funds += amt;
+        possesions.editProductInFile(new Product(name,funds,0), 1);
     }
 
+    /**
+     * buys product from storage. product gets removed from storage, added to user's possesions, and the price gets reducted from user.
+     * @param product product to be removed
+     */
     public void buyProduct(Product product) {
         ProductStorage products = possesions.readProductsFile();
-        if (products.findProduct(product) != null) {
-            products.findProduct(product).addStock();
+        Product foundProduct = products.findProduct(product);
+        if (foundProduct != null) {
+            foundProduct.addStock();
         } else {
             products.addProduct(product);
             products.findProduct(product).setStock(1);
-            products.findProduct(product).setPrice(0);
         }
         possesions.writeProductsFile(products);
         removeFunds(product.getPrice());
     }
 
+    public String toString() {
+        ProductStorage productsStorage = possesions.readProductsFile();
+        String possesionsStr = "name: " + productsStorage.findProduct(1).getName() +
+                " - balance: " + productsStorage.findProduct(1).getPrice() + "\n";
+        productsStorage.remove(productsStorage.findProduct(1));
+        for (Product p : productsStorage.getAllProducts()) {
+            possesionsStr += "\n" + p.getName() + " - " + p.getStock();
+        }
+        return possesionsStr;
+    }
+
+    /**
+     * initializes user, new or old
+     */
     public void createUser() {
         if (!possesions.getProductFile().exists()) {
             try {
+                funds = Double.parseDouble(javax.swing.JOptionPane.showInputDialog("how muc money"));
                 possesions.getProductFile().createNewFile();
+                ProductStorage newUser = possesions.readProductsFile();
+                newUser.addProduct(new Product(possesions.getProductFile().getName(), funds, 0));
+                possesions.writeProductsFile(newUser);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        possesions.editProductInFile(new Product(name,funds,0), 1);
+        funds = possesions.readProductsFile().findProduct(1).getPrice();
+
     }
 }

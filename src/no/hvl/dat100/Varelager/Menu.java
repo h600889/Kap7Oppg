@@ -5,26 +5,41 @@ public class Menu {
     private ProductsFile productsFile;
     private User user;
 
-    public Menu(ProductsFile productsFile, User user) {
+    public Menu(ProductsFile productsFile) {
         this.productsFile = productsFile;
-        this.user = user;
+        this.user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter username")));
+        user.createUser();
     }
 
+    /**
+     * launches main menu, letting you pick between different methods(which are all in this class)
+     * @return true if the user wants to quit, false otherwise
+     */
     public boolean mainMenu() {
         boolean finished = false;
         switch (Integer.parseInt
                 (javax.swing.JOptionPane.showInputDialog
-                        ("chose smth\n(1) view products\n(2) search products\n(3) add product\n(4) edit product\n(5) buy prduct\n(6) quit"))) {
+                        ("chose smth\n(1) view products\n(2) search products\n(3) add product\n(4) edit product" +
+                                "\n(5) buy prduct\n(6) view inventory\n(7) switch user\n(8) quit"))) {
             case 1 -> javax.swing.JOptionPane.showMessageDialog(null, productsFile.readProductsFile().toString());
             case 2 -> search();
             case 3 -> addProduct();
             case 4 -> editProduct();
             case 5 -> buyProduct();
+            case 6 -> javax.swing.JOptionPane.showMessageDialog(null, user.toString());
+            //viewInventory();
+            case 7 -> {
+                user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter new nme")));
+                user.createUser();
+            }
             default -> finished = true;
         }
         return finished;
     }
 
+    /**
+     * searches for a product in storage
+     */
     public void search() {
         String search = javax.swing.JOptionPane.showInputDialog("search");
         if (productsFile.searchProductsFile(search).toString().isEmpty()) {
@@ -35,6 +50,9 @@ public class Menu {
         }
     }
 
+    /**
+     * adds a product to storage
+     */
     public void addProduct() {
         boolean correctProduct = false;
         String productName;
@@ -56,6 +74,9 @@ public class Menu {
         productsFile.writeProductToFile(new Product(productName, productPrice, productStock));
     }
 
+    /**
+     * edits a product in storage
+     */
     public void editProduct() {
         int productNr = Integer.parseInt
                 (javax.swing.JOptionPane.showInputDialog
@@ -73,6 +94,9 @@ public class Menu {
         javax.swing.JOptionPane.showMessageDialog(null, "product is now:\n" + newProduct.toNiceString());
     }
 
+    /**
+     * buys a product in storage
+     */
     public void buyProduct() {
         int productNr = Integer.parseInt
                 (javax.swing.JOptionPane.showInputDialog
