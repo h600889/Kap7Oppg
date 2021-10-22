@@ -99,6 +99,7 @@ public class ProductStorage {
                 if (products[j-1] == null) {
                     products[j-1] = products[j];
                     products[j] = null;
+                    products[j-1].setProductNr(products[j-1].getProductNr()-1);
                 }
             }
         }

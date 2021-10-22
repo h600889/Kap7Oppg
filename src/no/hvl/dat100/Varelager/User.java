@@ -55,19 +55,40 @@ public class User {
         removeFunds(product.getPrice());
     }
 
+    public void sellProduct(Product product) {
+        ProductStorage products = possesions.readProductsFile();
+        Product foundProduct = products.findProduct(product);
+        if (foundProduct == null) { return; }
+        foundProduct.removeStock();
+        possesions.writeProductsFile(products);
+        addFunds(product.getPrice());
+        clean(product);
+    }
+
     /**
      * puts information abt user and sutff in a string
      * @return string with user and product list
      */
-    public String toString() {
+    public String toString(ProductStorage productStorage) {
         ProductStorage productsStorage = possesions.readProductsFile();
         String possesionsStr = "name: " + productsStorage.findProduct(1).getName() +
                 " - balance: " + productsStorage.findProduct(1).getPrice() + "\n";
-        productsStorage.remove(productsStorage.findProduct(1));
-        for (Product p : productsStorage.getAllProducts()) {
-            possesionsStr += "\n" + p.getName() + " - " + p.getStock();
+        for (Product p : getProducts().getAllProducts()) {
+            possesionsStr += "\n" + p.getProductNr() + ". " + p.getName() + " - " + p.getStock() + " (" + productStorage.findProduct(p).getPrice() + ")";
         }
         return possesionsStr;
+    }
+
+    public ProductStorage getProducts() {
+        ProductStorage newStorage = possesions.readProductsFile();
+        newStorage.remove(newStorage.findProduct(1));
+        return newStorage;
+    }
+
+    public void clean(Product product) {
+        ProductStorage cleanProducts = possesions.readProductsFile();
+        if (cleanProducts.findProduct(product).getStock() <= 0) { cleanProducts.remove(product); }
+        possesions.writeProductsFile(cleanProducts);
     }
 
     /**
@@ -81,7 +102,7 @@ public class User {
                 funds = Double.parseDouble(javax.swing.JOptionPane.showInputDialog("how muc money"));
                 possesions.getProductFile().createNewFile();
                 ProductStorage newUser = possesions.readProductsFile();
-                newUser.addProduct(new Product(possesions.getProductFile().getName(), funds, 0));
+                newUser.addProduct(new Product(possesions.getProductFile().getName(), funds, 1));
                 possesions.writeProductsFile(newUser);
                 return true;
             } catch (IOException e) {

@@ -30,7 +30,7 @@ public class Menu {
                                     (7) quit"""))) {
                 case 1 -> buyProduct(productsFile.readProductsFile());
                 case 2 -> buyProduct(search());
-                case 3 -> javax.swing.JOptionPane.showMessageDialog(null, user.toString());
+                case 3 -> sellProduct(user.getProducts());
                 case 4 -> editProduct();
                 case 5 -> addProduct();
                 case 6 -> user = new User(new ProductsFile(javax.swing.JOptionPane.showInputDialog("enter new nme")));
@@ -113,20 +113,38 @@ public class Menu {
         } catch (NumberFormatException e) {
             javax.swing.JOptionPane.showMessageDialog(null, "u didnt neter a number"); return;
         }
-
         if (productNr <= 0) { return; }
         Product product = productsList.findProduct(productNr);
 
-        if (product.getStock() > 0 && user.getFunds() >= product.getPrice()) {
-            user.buyProduct(product);
+        if (product.getStock() <= 0) { javax.swing.JOptionPane.showMessageDialog(null, "product not in stock"); return; }
+        if (user.getFunds() < product.getPrice()) { javax.swing.JOptionPane.showMessageDialog(null, "u dont have enough money"); return; }
 
-            ProductStorage products = productsFile.readProductsFile();
-            products.findProduct(productNr).removeStock();
-            productsFile.writeProductsFile(products);
-        } else if (user.getFunds() < product.getPrice()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "u dont have enough money");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "product is not in stock");
+        user.buyProduct(product);
+
+        ProductStorage products = productsFile.readProductsFile();
+        products.findProduct(productNr).removeStock();
+        productsFile.writeProductsFile(products);
+    }
+
+    public void sellProduct(ProductStorage productsList) {
+        if (productsList == null) { return; }
+        int productNr;
+        try {
+            productNr = Integer.parseInt
+                    (javax.swing.JOptionPane.showInputDialog
+                            (user.toString(productsFile.readProductsFile()) + "\n enter the number of the prduct u wanna sell:"));
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "u didnt neter a number"); return;
         }
+        if (productNr <= 0) { return; }
+        Product product = productsList.findProduct(productNr);
+
+        if (product.getStock() <= 0) { javax.swing.JOptionPane.showMessageDialog(null, "product not in stock"); return; }
+
+        user.sellProduct(product);
+
+        ProductStorage products = productsFile.readProductsFile();
+        products.findProduct(productNr).addStock();
+        productsFile.writeProductsFile(products);
     }
 }

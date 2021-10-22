@@ -68,6 +68,11 @@ public class Product {
         this.productNr = productNr;
     }
 
+    public boolean equals(Product product) {
+        if (product == null) { return false; }
+        return name.equals(product.name);
+    }
+
     /**
      *
      * @return the product but like as a string (for representation in text files)
